@@ -5,7 +5,7 @@ This works only for regular pornhub accounts.
 
 If you want to use the older version that logs into premium accounts you can find it at https://github.com/Zebraslive/Pornhub-Premium-Video-Streaming/blob/3be7ed25ca169b666305405693bcfc17ef57bdeb/api.php
 
-to use just add your email and pass to the loginx() function.
+to use just add your username and pass to the loginx() function.
 
 example
 https://chilltaco.000webhostapp.com/ph/api.php?u=https://www.pornhub.com/view_video.php?viewkey=ph5d357df3389ce
