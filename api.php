@@ -18,7 +18,7 @@ function createCookie() {
 $ua = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.A.B.C Safari/525.13';
 $ch = curl_init();
 $timeout = 10;
-curl_setopt($ch, CURLOPT_URL,"https://www.pornhubpremium.com/premium/login");
+curl_setopt($ch, CURLOPT_URL,"https://www.pornhub.com/login");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_USERAGENT, $ua);
 curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookies.txt');
@@ -30,14 +30,14 @@ $htmlf = curl_exec($ch);
 $internalErrors = libxml_use_internal_errors(true);
 $dom = new DOMDocument();
 @$dom->loadHTML($htmlf);
-    return $dom->getElementsByTagName('input')[3]->getAttribute('value');
+    return $dom->getElementsByTagName('input')[2]->getAttribute('value');
 }
 function loginx($token) {
-  $email = ""; //pornhub email
+  $username = ""; //pornhub username (not email)
   $passw = ""; //pornhub password
-  if ($passw === "" || $email === "") {exit('set your pornhub email and password inside loginx() function');}
-$url="https://www.pornhubpremium.com/front/authenticate";
-$postinfo = "username=".$email."&password=".$passw."&remember_me=on&token=".$token."&from=pc_premium_login&segment=straight";
+  if ($passw === "" || $username === "") {exit('set your pornhub username and password inside loginx() function');}
+$url="https://www.pornhub.com/front/authenticate";
+$postinfo = "username=".$username."&password=".$passw."&remember_me=on&token=".$token."&from=pc_login&segment=straight";
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_HEADER, false);
 curl_setopt($ch, CURLOPT_NOBODY, false);
@@ -71,10 +71,12 @@ curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
 $data = curl_exec($ch);
 $last = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
 curl_close($ch);
-if (strpos($last, '/login?redirect=') !== false) {
+if (strpos($data, 'isLogged 						= 0,') !== false) {
 //echo "attempting login...";
 loginx(createCookie()); //login again if session expires.
 $data = curfl($url);
+} else {
+
 }
 return $data;
 }
@@ -97,23 +99,37 @@ if (isset($_GET['f']) && !empty($_GET['f'])) {
 $current_time = time();
 $filexk = $vidkey.".txt"; //filename for cache
 if(file_exists($filexk)) {
-
  $rie = file_get_contents($filexk);
  $fied = json_decode($rie, true);
- if (strpos($fied[0]['url'], '&hash=') !== false) {
+ if (strpos($fied[0]['url'], '?ttl=') !== false) {
  $isf = explode('ttl=', $fied[0]['url']);
  $Efsif = explode('&ri=', $isf[1]);
  $ttlx = $Efsif[0];
+
  if ($current_time < $ttlx) {
+
    echo $rie;
    exit();
  }
+ } else if (strpos($fied[0]['url'], '&validto=') !== false) {
+ $isf = explode('validto=', $fied[0]['url']);
+ $Efsif = explode('&rate=', $isf[1]);
+ $ttlx = $Efsif[0];
+ 
+ if ($current_time < $ttlx) {
+   echo $rie;
+   exit();
+ } 
+ } else {
+     
+     echo $rie;
+   exit(); 
  }
 }
 $scriptx = "";
 $internalErrors = libxml_use_internal_errors(true);
 $dom = new DOMDocument();
-@$dom->loadHTML(curfl('https://www.pornhubpremium.com/view_video.php?viewkey='.$vidkey));
+@$dom->loadHTML(curfl('https://www.pornhub.com/view_video.php?viewkey='.$vidkey));
 $xpath = new DOMXPath($dom);
 $nlist = $xpath->query("//meta[@property='og:title']");
 $nlistx = $xpath->query("//meta[@property='og:image']");
