@@ -1,4 +1,6 @@
 # Pornhub-Video-Streaming
+EDIT: Pornhub changed video protection methods. The pornhub streaming script no longer works.
+You can still grab 720p sources from "youporn".
 Login to pornhub using PHP. Grabs direct mp4 up to 1080p
 
 This works only for regular pornhub accounts. 
